@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -13,9 +13,108 @@
     <h2><%= activationCode %></h2>
     <p>If the above link doesn't work, you can copy and paste the following URL into your browser:</p>
     <p>
-        For any query, mail us at <a href="ankitkr124039@gmail.com">Ankit Kumar</a>
+        For any query, mail us at <a href="mailto:ankitkr124039@gmail.com">Ankit Kumar</a>
     </p>
     <p>Thank you for joining us!</p>
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Offer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #007bff;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        .signature {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">Congratulations <%= user.name %>!</h1>
+        <p>We are excited to offer you an internship position at our company. Your hard work and dedication have
+            impressed us, and we believe you will make a valuable contribution to our team.</p>
+        <h2>Internship Details:</h2>
+        <ul>
+            <li><strong>Internship Title:</strong>
+                Frontend Developer
+            </li>
+            <li><strong>Duration:</strong>
+                20 weeks
+            </li>
+            <li><strong>Start Date:</strong>
+                Soon
+            </li>
+            <li><strong>Location:</strong>
+                Remote
+            </li>
+            <li><strong>Compensation:</strong>
+                10k/month
+            </li>
+        </ul>
+        <h2>Next Steps:</h2>
+        <ol>
+            <li>Review the attached internship agreement and job description.</li>
+            <li>Confirm your acceptance of this internship offer by replying to this email within 2 days.</li>
+            <li>Complete any necessary paperwork and provide required documentation as outlined in the internship
+                agreement.</li>
+            <li>Use activation code</li>
+            <h2>
+                <%= activationCode %>
+            </h2>
+        </ol>
+        <p>If you have any questions or need further information, please do not hesitate to contact us at <a
+                href="mailto:hr@xbyte.com">hr@xbyte.com</a>.</p>
+        <p>We look forward to welcoming you to our team!</p>
+        <p class="signature">Sincerely,<br>Human Resources Team</p>
+    </div>
 </body>
 
 </html>
