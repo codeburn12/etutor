@@ -1,5 +1,4 @@
-require('dotenv').config();
-// Import necessary modules from Mongoose, bcrypt and jwt
+// Import necessary modules from Mongoose
 import mongoose, { Document, Schema, Model } from "mongoose";
 
 interface IComment extends Document {
@@ -33,7 +32,7 @@ interface IcourseData extends Document {
     questions: IComment[];
 }
 
-interface ICourse extends Document {
+export interface ICourse extends Document {
     name: string;
     description: string;
     price: number;
@@ -50,7 +49,7 @@ interface ICourse extends Document {
     purchased?: number;
 }
 
-const commentSchema = new Schema < IComment > ({
+const commentSchema = new Schema<IComment>({
     user: Object,
     comment: String,
     commentReplies: [Object],
@@ -75,7 +74,7 @@ const courseDataSchema = new Schema<IcourseData>({
     title: String,
     description: String,
     videoUrl: String,
-    videoThumbnail: Object,
+    // videoThumbnail: Object,
     videoSection: String,
     videoLength: Number,
     videoPlayer: String,
@@ -97,15 +96,17 @@ const courseSchema = new Schema<ICourse>({
         type: Number,
         require: true,
     },
-    estimatedPrice: Number,
+    estimatedPrice: {
+        type: Number,
+    },
     thumbnail: {
         public_id: {
-            required: true,
+            // required: true,
             type: String,
         },
         url: {
-            required: true,
-            type:String,
+            // required: true,
+            type: String,
         }
     },
     tags: {
@@ -134,6 +135,6 @@ const courseSchema = new Schema<ICourse>({
     },
 })
 
-const courseModel: Model<ICourse> = mongoose.model("Course", courseSchema);
+const CourseModel: Model<ICourse> = mongoose.model("Course", courseSchema);
 
-export default courseModel;
+export default CourseModel;

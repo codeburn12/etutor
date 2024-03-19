@@ -1,4 +1,4 @@
-import userModel from "../models/user.model";
+import UserModel from "../models/user.model";
 import { Response } from "express";
 import { redis } from "../utils/redis";
 

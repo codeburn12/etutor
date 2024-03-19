@@ -35,8 +35,14 @@ export const authUser = CatchAsyncError(async (req: Request, res: Response, next
 
 export const authUserRoles = (...roles: string[]) => {
     return (req: Request, res: Response, next: NextFunction) => {
-        if (!roles.includes(req.user?.role || '')) {
-            return next(new ErrorHandler(`Role: ${req.user?.role} is not allowed to access this resource`, 403));
+        if (!req.user) {
+            return next(new ErrorHandler("User not authenticated", 401));
         }
+
+        if (!roles.includes(req.user.role)) {
+            return next(new ErrorHandler(`Role: ${req.user.role} is not allowed to access this resource`, 403));
+        }
+
+        next();
     }
 }

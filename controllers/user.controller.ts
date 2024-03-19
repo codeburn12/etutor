@@ -1,7 +1,7 @@
 // Import necessary modules and interfaces
 require('dotenv').config(); // Load environment variables from a .env file
 import { Request, Response, NextFunction } from "express"; // Import express types
-import userModel, { IUser } from "../models/user.model"; // Import user model and IUser interface
+import UserModel, { IUser } from "../models/user.model"; // Import user model and IUser interface
 import ErrorHandler from "../utils/ErrorHandler"; // Import custom error handler
 import { CatchAsyncError } from "../middleware/catchAsyncError"; // Import async error handler
 import jwt, { Secret, JwtPayload } from "jsonwebtoken"; // Import JWT and related types
@@ -62,7 +62,7 @@ export const userRegistration = CatchAsyncError(async (req: Request, res: Respon
         // Extract registration data from request body
         const { name, email, password } = req.body;
         // Check if email already exists in the database
-        const emailExist = await userModel.findOne({ email });
+        const emailExist = await UserModel.findOne({ email });
         if (emailExist) {
             return next(new ErrorHandler("Email already exists", 400));
         }
@@ -120,13 +120,13 @@ export const activateUser = CatchAsyncError(async (req: Request, res: Response, 
 
         // Check if user already exists
         const { name, email, password } = newUser.user;
-        const userExist = await userModel.findOne({ email });
+        const userExist = await UserModel.findOne({ email });
         if (userExist) {
             return next(new ErrorHandler("Email already exists", 400));
         }
 
         // Create new user
-        const user = await userModel.create({
+        const user = await UserModel.create({
             name, email, password,
         });
 
@@ -149,7 +149,7 @@ export const loginUser = CatchAsyncError(async (req: Request, res: Response, nex
         }
 
         // Find user by email and select password field
-        const user = await userModel.findOne({ email }).select("+password")
+        const user = await UserModel.findOne({ email }).select("+password")
         if (!user) {
             return next(new ErrorHandler("Invalid email or password", 400));
         }
@@ -237,10 +237,10 @@ export const socialAuth = CatchAsyncError(async (req: Request, res: Response, ne
         // Extract social auth data from request body
         const { email, name, avatar } = req.body as ISocialAuthBody;
         // Check if user exists
-        const user = await userModel.findOne({ email });
+        const user = await UserModel.findOne({ email });
         if (!user) {
             // Create new user if not exists
-            const newUser = await userModel.create({ name, email, avatar });
+            const newUser = await UserModel.create({ name, email, avatar });
             sendToken(newUser, 200, res);
         } else {
             // Send tokens if user exists
@@ -258,10 +258,10 @@ export const updateUserInfo = CatchAsyncError(async (req: Request, res: Response
         const { name, email } = req.body as IUpdateUserInfo;
         const userId = req.user?._id;
         // Find user by ID
-        const user = await userModel.findById(userId);
+        const user = await UserModel.findById(userId);
         if (user && email) {
             // Check if email already exists
-            const emailExist = await userModel.findOne({ email });
+            const emailExist = await UserModel.findOne({ email });
             if (emailExist) {
                 return next(new ErrorHandler("Email already exists", 400));
             }
@@ -298,7 +298,7 @@ export const updateUserPassword = CatchAsyncError(async (req: Request, res: Resp
 
         const userId = req.user?._id;
         // Find user by ID and select password field
-        const user = await userModel.findById(userId).select("+password");
+        const user = await UserModel.findById(userId).select("+password");
         if (user?.password === undefined) {
             return next(new ErrorHandler("Unknown User", 400));
         }
@@ -333,7 +333,7 @@ export const updateUserAvatar = CatchAsyncError(async (req: Request, res: Respon
 
         const userId = req.user?._id;
         // Find user by ID
-        const user = await userModel.findById(userId);
+        const user = await UserModel.findById(userId);
 
         if (avatar && user) {
             if (user?.avatar?.public_id) {
