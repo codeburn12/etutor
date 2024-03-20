@@ -9,7 +9,6 @@ import path from "path";
 import ejs from 'ejs'
 import sendMail from "../utils/sendMail";
 import { newOrder } from "../services/order.service";
-import { deflate } from "zlib";
 
 
 export const createOrder = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
@@ -66,7 +65,8 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
             title: "New Order",
             message: `You have a new order from ${user?.name}`,
         })
-        course.purchased ? course.purchased += 1 : course.purchased;
+        course.purchased ? (course.purchased += 1) : (course.purchased = 1);
+
         await course.save();
         newOrder(data, res, next);
 
