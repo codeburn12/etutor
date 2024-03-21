@@ -4,31 +4,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Order Confirmation</title>
+    <title>Order Confirmation</title>
+    <style>
+        /* Add your custom styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            margin-bottom: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #777;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Order Confirmation</h1>
-    <p>Thank you for ordering the course "<span id="courseName"></span>".</p>
-    <p>Order ID: <span id="orderID"></span></p>
-    <p>Price: $<span id="coursePrice"></span></p>
-    <p>Date: <span id="orderDate"></span></p>
-
-    <script>
-        const mailData = {
-            order: {
-                _id: '<%= order._id %>',
-                name: '<%= order.name %>',
-                price: '<%= order.price %>',
-                date: '<%= order.date %>'
-            }
-        };
-
-        document.getElementById('courseName').textContent = mailData.order.name;
-        document.getElementById('orderID').textContent = mailData.order._id;
-        document.getElementById('coursePrice').textContent = mailData.order.price;
-        document.getElementById('orderDate').textContent = mailData.order.date;
-    </script>
+    <div class="container">
+        <div class="header">
+            <h1>Order Confirmation</h1>
+        </div>
+        <div class="content">
+            <p>Dear Customer,</p>
+            <p>We are pleased to inform you that your order has been confirmed:</p>
+            <ul>
+                <li><strong>Order ID:</strong>
+                    <%= order._id %>
+                </li>
+                <li><strong>Course Name:</strong>
+                    <%= order.name %>
+                </li>
+                <li><strong>Price:</strong>
+                    <%= order.price %>
+                </li>
+                <li><strong>Date:</strong>
+                    <%= order.date %>
+                </li>
+            </ul>
+            <p>Thank you for shopping with us!</p>
+        </div>
+        <div class="footer">
+            <p>If you have any questions, feel free to contact us.</p>
+        </div>
+    </div>
 </body>
 
 </html>

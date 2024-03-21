@@ -2,7 +2,7 @@ import { authUser, authUserRoles } from './../middleware/auth';
 // Import the express module
 import express from 'express';
 // Import the userRegistration controller function from '../controllers/user.controller'
-import { userRegistration, activateUser, loginUser, logoutUser, updateUserAvatar, updateUserPassword, updatedAccessToken, getUserInfo, socialAuth, updateUserInfo} from '../controllers/user.controller';
+import { userRegistration, activateUser, loginUser, logoutUser, updateUserAvatar, updateUserPassword, updatedAccessToken, getUserInfo, socialAuth, updateUserInfo, getAllUsers, updateUserRole, deleteUser} from '../controllers/user.controller';
 
 // Create a new router instance using Express's Router
 const userRouter = express.Router();
@@ -37,6 +37,10 @@ userRouter.put('/updateUserPassword', authUser, updateUserPassword);
 
 // Define a PUT route for update user avatar at '/updateUserAvatar'
 userRouter.put('/updateUserAvatar', authUser, updateUserAvatar);
+
+userRouter.get('/get-users', authUser, authUserRoles("admin"), getAllUsers);
+userRouter.put('/update-user-role', authUser, authUserRoles("admin"), updateUserRole);
+userRouter.delete('/delete-user/:id', authUser, authUserRoles("admin"), deleteUser);
 
 
 // Export the userRouter to be used in other parts of the application

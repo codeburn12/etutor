@@ -3,7 +3,7 @@ import { Response, Request, NextFunction } from "express";
 import cloudinary from 'cloudinary'
 import ErrorHandler from "../utils/ErrorHandler";
 import { CatchAsyncError } from "../middleware/catchAsyncError";
-import { createCourse } from "../services/course.service";
+import { createCourse, getAllCoursesService } from "../services/course.service";
 import CourseModel from "../models/course.model";
 import { redis } from "../utils/redis";
 import mongoose from "mongoose";
@@ -67,7 +67,7 @@ export const getSingleCourse = CatchAsyncError(async (req: Request, res: Respons
         else {
             const course = await CourseModel.findById(courseId).select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links");
 
-            await redis.set(courseId, JSON.stringify(course));
+            await redis.set(courseId, JSON.stringify(course), "EX", 604800);
 
             res.status(201).json({
                 success: true,
@@ -349,4 +349,29 @@ export const addReviewReplies = CatchAsyncError(async (req: Request, res: Respon
         return next(new ErrorHandler(error.message, 500));
     }
 })
+// Only for admins
+export const getAllCourses = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        getAllCoursesService(res);
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+})
 
+export const deleteCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const courseId = req.params.id;
+        const course = await CourseModel.findById(courseId);
+        if (!course) {
+            return next(new ErrorHandler("Course not found", 400));
+        }
+        await course.deleteOne({ courseId });
+        await redis.del(courseId);
+        res.status(200).json({
+            success: true,
+            message: "Course deleted successfully"
+        })
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+})

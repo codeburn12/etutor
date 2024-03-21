@@ -10,7 +10,7 @@ import path from "path"; // Import path module for file paths
 import { sendMail } from "../utils/sendMail"; // Import function for sending emails
 import { accessTokenOptions, refreshTokenOptions, sendToken } from "../utils/jwt"; // Import JWT related functions and options
 import { redis } from "../utils/redis"; // Import Redis client
-import { getUserById } from "../services/user.service"; // Import function to get user by ID
+import { getAllUsersService, getUserById, updateUsersRoleService } from "../services/user.service"; // Import function to get user by ID
 import cloudinary from 'cloudinary'; // Import cloudinary for image handling
 
 // Define interfaces for registration, activation, login, social authentication, and user updates
@@ -198,7 +198,7 @@ export const updatedAccessToken = CatchAsyncError(async (req: Request, res: Resp
         // Get session from Redis
         const session = await redis.get(decoded.id as string);
         if (!session) {
-            return next(new ErrorHandler("Session not found", 400));
+            return next(new ErrorHandler("Please login to access this resourse", 400));
         }
 
         // Generate new access and refresh tokens
@@ -208,6 +208,8 @@ export const updatedAccessToken = CatchAsyncError(async (req: Request, res: Resp
         req.user = user;
         res.cookie("access_token", accessToken, accessTokenOptions);
         res.cookie("refresh_token", refreshToken, refreshTokenOptions);
+
+        await redis.set(user._id, JSON.stringify(user), "EX", 604800);
 
         // Send success response with new access token
         res.status(200).json({
@@ -370,3 +372,39 @@ export const updateUserAvatar = CatchAsyncError(async (req: Request, res: Respon
         return next(new ErrorHandler(error.message, 400));
     }
 });
+
+// Only for admins
+export const getAllUsers = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        getAllUsersService(res);
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+})
+
+export const updateUserRole = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id, role } = req.body;
+        updateUsersRoleService(res, id, role);
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+})
+
+export const deleteUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.params.id;
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return next(new ErrorHandler("User not found", 400));
+        }
+        await user.deleteOne({ userId });
+        await redis.del(userId);
+        res.status(200).json({
+            success: true,
+            message: "User deleted successfully"
+        })
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+})

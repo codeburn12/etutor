@@ -1,3 +1,4 @@
+import { getAllOrdersService } from './../services/order.service';
 import { Request, Response, NextFunction } from "express";
 import { CatchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
@@ -30,8 +31,6 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
             userId: user?._id,
             payment_info,
         }
-
-        newOrder(data, res, next)
 
         const mailData = {
             order: {
@@ -75,3 +74,11 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
     }
 })
 
+// Only for admins
+export const getAllOrders = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        getAllOrdersService(res);
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+})
