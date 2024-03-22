@@ -1,0 +1,34 @@
+.header {
+    position: relative;
+    width: 100%;
+}
+
+/* For light mode */
+.container_active {
+    /* 50% opacity black */
+    background-color: rgba(0, 0, 0, 0.5);
+
+    /* Gradient from black to white */
+    background-image: linear-gradient(to bottom, #000000, #ffffff);
+
+    background-color: #333333;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    
+}
+
+/* For dark mode */
+@media (prefers-color-scheme: dark) {
+    .container_active {
+        /* 50% opacity white */
+        background-color: rgba(255, 255, 255, 0.5);
+
+        /* Gradient from white to black */
+        background-image: linear-gradient(to bottom, #ffffff, #000000);
+
+        background-color: #1a1a1a;
+
+    }
+}
