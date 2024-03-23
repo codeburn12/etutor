@@ -2,7 +2,7 @@
 import React, { FC, useState } from 'react'
 import './Header.css'
 
-type Props = {
+interface Props {
     open: boolean;
     setOpen: (open: boolean) => void;
     activeItem: number;
@@ -25,8 +25,8 @@ const Header: FC<Props> = (props) => {
 
     return (
         <div className='header'>
-            <div className='container'>
-
+            <div className={`${active ? 'container_active' : 'container_inactive'}`}>
+                hi baby
             </div>
         </div>
     )
