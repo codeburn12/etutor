@@ -1,0 +1,34 @@
+.navbar {
+    display: none;
+
+}
+
+.navitem {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 100;
+}
+
+.navitem_active {
+    font-size: 1.05rem;
+    font-weight: 900;
+}
+
+
+.mobileview_navitem_display {
+    display: block;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+@media (min-width: 800px) {
+    .navbar {
+        display: flex;
+    }
+
+    .mobileview_navitem {
+        display: none;
+        margin-top: 0.5rem;
+    }
+}

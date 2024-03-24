@@ -3,9 +3,10 @@
 import React, { FC, useState } from "react"
 import Header from './components/Header/Header'
 
-interface Props{ }
+interface Props { }
 
 const Page: FC<Props> = (props) => {
+  // State for header component
   const [open, setOpen] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
   return (
