@@ -38,7 +38,7 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
 
     return (
         <div className='header'>
-            <div className={`${active ? 'container_active' : 'container_inactive'}`}>
+            <div className={`${active ? 'container_active dark:bg-black' : 'container_inactive'}`}>
                 <div className='subcontainer'>
                     <div className='header_items'>
                         {/* Logo */}
