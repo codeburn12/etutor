@@ -50,7 +50,7 @@ const NavItems: FC<Props> = ({activeItems, isMobile}) => {
                     <div className="mobileview_navitem">
                         {
                             navItemsData && navItemsData.map((item, index) => (
-                                <Link href="/" passHref>
+                                <Link href="/" key={index} passHref>
                                     <span className={`${activeItems === index ? "navitem_active" : "navitem_inactive"} navitem mobileview_navitem_display`}>
                                         {item.name}
                                     </span>

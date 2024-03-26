@@ -88,14 +88,6 @@
     padding-left: 1rem;
 }
 
-.vertical_line {
-    height: 1rem;
-    width: 1px;
-    border: 1px solid #8C94A3;
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
-}
-
 .horizontal_line {
     height: 1px;
     width: 100%;

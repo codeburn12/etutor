@@ -7,13 +7,21 @@ import ThemeSwitcher from '@/app/utils/ThemeSwitcher/ThemeSwitcher';
 import { HiMenu, HiOutlineUserCircle } from 'react-icons/hi';
 import { AiOutlineClose } from "react-icons/ai";
 import Image from 'next/image';
-interface Props {
+import Login from '../Authentication/Login/Login';
+import Signup from '../Authentication/Signup/Signup';
+import CustomModal from '../../utils/CustomModal/CustomModal';
+import Verification from '../Authentication/Verification/Verification';
+
+type Props = {
     open: boolean;
     setOpen: (open: boolean) => void;
     activeItem: number;
+    route: string;
+    setRoute: (route: string) => void;
+    component: (props: any) => JSX.Element;
 }
 
-const Header: FC<Props> = ({ activeItem, setOpen }) => {
+const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute, component }) => {
     // State for Header active or inactive
     const [active, setActive] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
@@ -34,6 +42,11 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
         if (e.target.id === 'screen') {
             setOpenSidebar(false);
         }
+    }
+
+    const handleSignIn = (e:any) => {
+        handleClose(e);
+        setOpen(true);
     }
 
     return (
@@ -72,9 +85,7 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
                                                 <div>
                                                     <div className='mobile_auth'>
                                                         <div className='flex items-center'>
-                                                            <Link href={'/'} className='text-slate-600 dark:text-white'>Sign In</Link>
-                                                            <div className='vertical_line dark:text-white'></div>
-                                                            <Link href={'/'} className='text-slate-600 dark:text-white'>Register</Link>
+                                                            <Link onClick={handleSignIn} id='screen' href={'/'} className='text-slate-600 dark:text-white'>Log in</Link>
                                                         </div>
                                                         <div>
                                                             <AiOutlineClose
@@ -126,6 +137,63 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
 
 
             </div>
+
+            {
+                route === "Login" && (
+                    <>
+                        {
+                            open && (
+                                <CustomModal
+                                    open={open}
+                                    setOpen={setOpen}
+                                    activeItem={activeItem}
+                                    setRoute={setRoute}
+                                    route={route}
+                                    component={Login}
+                                />
+                            )
+                        }
+                    </>
+                )
+            }
+
+            {
+                route === "Signup" && (
+                    <>
+                        {
+                            open && (
+                                <CustomModal
+                                    open={open}
+                                    setOpen={setOpen}
+                                    activeItem={activeItem}
+                                    setRoute={setRoute}
+                                    route={route}
+                                    component={Signup}
+                                />
+                            )
+                        }
+                    </>
+                )
+            }
+
+            {
+                route === "Verification" && (
+                    <>
+                        {
+                            open && (
+                                <CustomModal
+                                    open={open}
+                                    setOpen={setOpen}
+                                    activeItem={activeItem}
+                                    setRoute={setRoute}
+                                    route={route}
+                                    component={Verification}
+                                />
+                            )
+                        }
+                    </>
+                )
+            }
         </div>
     )
 }

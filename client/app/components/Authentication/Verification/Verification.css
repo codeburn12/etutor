@@ -1,0 +1,107 @@
+.verification-title {
+    font-size: 2rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+}
+
+.verification-description {
+    color: #8C94A3;
+    font-family: "Poppins", sans-serif;
+}
+
+.authenticator {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.authenticator-icon {
+    height: 80px;
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #FF6636;
+}
+
+.otp {
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.otp-verify {
+    width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+        border-width: 2px;
+        border-radius: 4px;
+        /* Set the border-radius for square corners */
+        font-size: 18px;
+        font-family: "Poppins", sans-serif;
+        outline: none;
+        text-align: center;
+        border: 2px solid #0000004a;
+        /* Added border style */
+        color: black;
+        /* Default text color */
+}
+
+.verify-button {
+    padding: 0.5rem 3rem;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FF6636;
+    cursor: pointer;
+}
+
+.verify-button-text {
+    font-size: 1rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: white;
+}
+
+.create-account {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.create-account-text {
+    font-size: 12px;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+    2% {
+        transform: translateX(-2px);
+    }
+    40% {
+        transform: translateX(2px);
+    }
+    60% {
+        transform: translateX(-2px);
+    }
+    80% {
+        transform: translateX(2px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}

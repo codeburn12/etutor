@@ -27,6 +27,12 @@ body {
   border: 1px solid red;
 } */
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .hero_animation {
   height: 60vh;
   width: 50vw;
