@@ -1,5 +1,5 @@
 'use client'
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import './Header.css'
 import Link from 'next/link';
 import NavItems from '@/app/utils/NavItems/NavItems';
@@ -11,6 +11,10 @@ import Login from '../Authentication/Login/Login';
 import Signup from '../Authentication/Signup/Signup';
 import CustomModal from '../../utils/CustomModal/CustomModal';
 import Verification from '../Authentication/Verification/Verification';
+import { useSelector } from 'react-redux';
+import { useSession } from 'next-auth/react';
+import { useSocialAuthMutation } from '@/redux/features/auth/authApi';
+import toast from 'react-hot-toast';
 
 type Props = {
     open: boolean;
@@ -25,6 +29,21 @@ const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute, compone
     // State for Header active or inactive
     const [active, setActive] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
+    const { user } = useSelector((state: any) => state.auth);
+    const { data } = useSession();
+    const [socialAuth, { isSuccess, isError, error, }] = useSocialAuthMutation();
+
+    useEffect(() => {
+        if (!user) {
+            if (data) {
+                socialAuth({ email: data?.user?.email, name: data?.user?.name, avatar: data?.user?.image })
+            }
+        }
+        if (isSuccess) {
+            const message = "Login Successfully";
+            toast.success(message);
+        }
+    }, [data, user]);
 
     // If scrollY > 80 then header become active
     if (typeof window !== 'undefined') {
@@ -44,7 +63,7 @@ const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute, compone
         }
     }
 
-    const handleSignIn = (e:any) => {
+    const handleSignIn = (e: any) => {
         handleClose(e);
         setOpen(true);
     }
@@ -84,9 +103,6 @@ const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute, compone
                                             <div className='sidebar_content dark:bg-slate-900 dark:bg-opacity-90'>
                                                 <div>
                                                     <div className='mobile_auth'>
-                                                        <div className='flex items-center'>
-                                                            <Link onClick={handleSignIn} id='screen' href={'/'} className='text-slate-600 dark:text-white'>Log in</Link>
-                                                        </div>
                                                         <div>
                                                             <AiOutlineClose
                                                                 size={25}
@@ -95,6 +111,30 @@ const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute, compone
                                                                 id='screen'
                                                             />
                                                         </div>
+                                                        {
+                                                            user ? (
+                                                                <div className='flex items-center'>
+                                                                    <Link href={"/profile"}>
+                                                                        <img
+                                                                            src={user.avatar ? user.avatar : "https://res.cloudinary.com/dc0gfvucc/image/upload/v1711539263/etutor-frontend/Unknown_person_pv153i.jpg"}
+                                                                            alt=""
+                                                                            height="30px"
+                                                                            width="30px"
+                                                                            className="rounded-full cursor-pointer"
+                                                                        />
+                                                                    </Link>
+                                                                </div>
+                                                            ) : (
+                                                                <div>
+                                                                    <HiOutlineUserCircle
+                                                                        size={25}
+                                                                        className='block 800px:block cursor-pointer dark:text-white text-black'
+                                                                        onClick={handleSignIn}
+                                                                        id='screen'
+                                                                    />
+                                                                </div>
+                                                            )
+                                                        }
                                                     </div>
                                                     <div className='horizontal_line'></div>
                                                     <NavItems activeItems={activeItem} isMobile={true} />
@@ -124,13 +164,29 @@ const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute, compone
                                 )
                             }
 
-                            <div>
-                                <HiOutlineUserCircle
-                                    size={25}
-                                    className='hidden 800px:block cursor-pointer dark:text-white text-black'
-                                    onClick={() => setOpen(true)}
-                                />
-                            </div>
+                            {
+                                user ? (
+                                    <Link href={"/profile"}>
+                                        <img
+                                            src={user.avatar ? user.avatar : "https://res.cloudinary.com/dc0gfvucc/image/upload/v1711539263/etutor-frontend/Unknown_person_pv153i.jpg"}
+                                            alt=""
+                                            height="30px"
+                                            width="30px"
+                                            className="rounded-full cursor-pointer"
+                                        />
+                                    </Link>
+                                ) : (
+                                    <div>
+                                        <HiOutlineUserCircle
+                                            size={25}
+                                            className='hidden 800px:block cursor-pointer dark:text-white text-black'
+                                            onClick={handleSignIn}
+                                            id='screen'
+                                        />
+                                    </div>
+                                )
+                            }
+
                         </div>
                     </div>
                 </div>
@@ -194,7 +250,7 @@ const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute, compone
                     </>
                 )
             }
-        </div>
+        </div >
     )
 }
 

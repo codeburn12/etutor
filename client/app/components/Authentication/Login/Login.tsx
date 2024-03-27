@@ -1,7 +1,5 @@
-// Login.jsx
-
 'use client'
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import './Login.css' // Import CSS file for styling
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -10,9 +8,13 @@ import { FcGoogle } from 'react-icons/fc'
 import { FaEnvelope } from 'react-icons/fa';
 import { FaLock } from "react-icons/fa";
 import Link from 'next/link'
+import { useLoginMutation } from '@/redux/features/auth/authApi'
+import toast from 'react-hot-toast'
+import { signIn } from 'next-auth/react'
 
 type Props = {
     setRoute: (route: string) => void;
+    setOpen: (open: boolean) => void;
 }
 
 const schema = Yup.object().shape({
@@ -20,17 +22,32 @@ const schema = Yup.object().shape({
     password: Yup.string().required("Please enter your password").min(6),
 })
 
-const Login: FC<Props> = ({ setRoute }) => {
+const Login: FC<Props> = ({ setRoute, setOpen }) => {
     const [show, setShow] = useState(false);
     const [checked, setChecked] = useState(false);
+    const [login, {isLoading, isSuccess, isError, data, error}] = useLoginMutation();
 
     const formik = useFormik({
         initialValues: { email: "", password: "" },
         validationSchema: schema,
         onSubmit: async ({ email, password }) => {
-            console.log(email, password)
+            await login({ email, password });
         }
     })
+
+    useEffect(() => {
+        if (isSuccess) {
+            const message =  "Login Successfully";
+            toast.success(message);
+            setOpen(false);
+        }
+        if (error) {
+            if ("data" in error) {
+                const errorData = error as any;
+                toast.error(errorData.data.message);
+            }
+        }
+    }, [isSuccess, error]);
 
     const { errors, touched, values, handleChange, handleSubmit } = formik;
 
@@ -44,11 +61,11 @@ const Login: FC<Props> = ({ setRoute }) => {
                     Welcome back! Select method to log in:
                 </p>
                 <div className='login-method'>
-                    <div className='login-method1 dark:border-white'>
+                    <div className='login-method1 dark:border-white' onClick={() => signIn("google")}>
                         <FcGoogle />
                         <p>Google</p>
                     </div>
-                    <div className='login-method1 dark:border-white'>
+                    <div className='login-method1 dark:border-white' onClick={() => signIn("github")}>
                         <AiFillGithub />
                         <p>Github</p>
                     </div>

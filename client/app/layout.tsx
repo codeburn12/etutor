@@ -1,9 +1,12 @@
-import type { Metadata } from "next";
+'use client'
+
 import "./globals.css";
 import { Poppins } from "next/font/google";
 import { Josefin_Sans } from "next/font/google";
 import { ThemeProvider } from "./utils/theme-provider";
 import { Toaster } from "react-hot-toast";
+import { Providers } from "./Provider";
+import { SessionProvider } from "next-auth/react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -17,12 +20,6 @@ const josefin = Josefin_Sans({
   variable: "--font-Josefin",
 })
 
-export const metadata: Metadata = {
-  title: "ETutor",
-  description: "A learnig and teaching platform",
-  keywords: "Programming, MERN, Testing"
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,10 +28,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} ${josefin.variable} !bg-white bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-          <Toaster position="top-center" reverseOrder={false} />
-        </ThemeProvider>
+        <Providers>
+          <SessionProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              {children}
+              <Toaster position="top-center" reverseOrder={false} />
+            </ThemeProvider>
+          </SessionProvider>
+        </Providers>
       </body>
     </html>
   );
