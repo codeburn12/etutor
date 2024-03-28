@@ -15,6 +15,8 @@ export const authOptions = {
         })
 
     ],
+    callbacks: {
+    },
     secret: process.env.SECRET,
 }
 
